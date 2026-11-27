@@ -1,0 +1,39 @@
+name: Validate Ansible configuration
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+defaults:
+  run:
+    working-directory: practice-11/ansible
+env:
+  ANSIBLE_COLLECTIONS_PATH: ${{ runner.temp }}/ansible-collections
+jobs:
+  ansible-syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Setup Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: practice-11/ansible/requirements-control.txt
+      - name: Install Ansible and collections
+        run: |
+          python -m pip install -r requirements-control.txt
+          ansible-galaxy collection install -r requirements.yml -p "$ANSIBLE_COLLECTIONS_PATH"
+      - name: Inspect both inventories
+        run: |
+          ansible-inventory -i inventory/bootstrap.ini --graph
+          ansible-inventory --graph
+      - name: Check playbook syntax without connecting to VM
+        run: |
+          ansible-playbook -i inventory/bootstrap.ini site.yml --syntax-check
+          ansible-playbook site.yml --syntax-check
+          ansible-playbook verify.yml --syntax-check
