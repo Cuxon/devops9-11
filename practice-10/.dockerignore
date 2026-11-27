@@ -1,0 +1,12 @@
+.git
+.github
+.pytest_cache
+__pycache__
+**/__pycache__
+*.pyc
+**/*.pyc
+tests
+requirements-dev.txt
+README.md
+.env
+.env.*
