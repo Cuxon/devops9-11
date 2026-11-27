@@ -91,3 +91,36 @@ jobs:
             --tag "${IMAGE_NAME}:${GITHUB_SHA}" \
             --tag "${IMAGE_NAME}:latest" \
             --push .
+  deploy:
+    needs: image
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: [self-hosted, devops-vm]
+    permissions:
+      contents: read
+    concurrency:
+      group: deploy-devops-vm
+      cancel-in-progress: false
+    env:
+      VM_HOST: 192.168.252.3
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Deploy with Ansible
+        working-directory: practice-11/ansible
+        run: |
+          set -euo pipefail
+          source "$HOME/.venvs/devops11/bin/activate"
+          ansible-playbook -i inventory/prod.ini site.yml -e "app_tag=${GITHUB_SHA}"
+          ansible-playbook -i inventory/prod.ini verify.yml -e "app_tag=${GITHUB_SHA}"
+      - name: Check through Nginx
+        working-directory: .
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error \
+            --connect-timeout 5 --max-time 15 \
+            --retry 5 --retry-delay 2 --retry-connrefused \
+            "http://${VM_HOST}/health" |
+            "$HOME/.venvs/devops11/bin/python" -c \
+              'import json, sys; payload = json.load(sys.stdin); print(payload); sys.exit(0 if payload == {"status": "ok"} else 1)'
