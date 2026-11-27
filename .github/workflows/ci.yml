@@ -56,9 +56,9 @@ jobs:
   image:
     needs: test
     runs-on: ubuntu-latest
-    # Учебный инцидент 1: до воспроизведения отказа нет packages: write.
     permissions:
       contents: read
+      packages: write
     steps:
       - name: Checkout
         uses: actions/checkout@v7
