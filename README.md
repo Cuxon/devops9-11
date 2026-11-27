@@ -1,15 +1,12 @@
-# devops9-11
+# Практические работы №9–11
 
-Учебный репозиторий практической работы №9: Pylint, MkDocs, GitHub Actions и GitHub Pages.
+| Работа | Материалы |
+|---|---|
+| №9 — CI и GitHub Pages | [practice-09](practice-09/) |
+| №10 | [practice-10](practice-10/) |
+| №11 | [practice-11](practice-11/) |
 
-- `docs/` — исходники документации;
-- `src/status.py` — Python-код для статического анализа;
-- `mkdocs.yml` — конфигурация MkDocs;
-- `.github/workflows/quality.yml` — CI;
-- `.github/workflows/pages.yml` — публикация (добавляется на следующем этапе).
+Workflow GitHub Actions находятся в корневом каталоге `.github/workflows/`.
+Проверка `pylint` анализирует код и собирает документацию работы №9.
 
-Каталог `site/` — результат сборки, который не хранится в Git.
-
-Репозиторий: https://github.com/Cuxon/devops9-11
-
-Сайт после настройки публикации: https://cuxon.github.io/devops9-11/
+Опубликованный сайт работы №9: https://cuxon.github.io/devops9-11/

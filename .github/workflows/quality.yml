@@ -10,6 +10,9 @@ permissions:
 jobs:
   pylint:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: practice-09
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -18,7 +21,7 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
-          cache-dependency-path: requirements-dev.txt
+          cache-dependency-path: practice-09/requirements-dev.txt
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
