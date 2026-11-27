@@ -1,0 +1,8 @@
+---
+app_image: "ghcr.io/cuxon/devops9-11"
+app_tag: "002a84b6702f4aef06e31f8b8518cc265d0e186b"
+app_container_name: "devops-ci-app"
+app_host_port: 5000
+app_internal_port: 5000
+# ubuntu сохраняет управление Multipass после SSH-hardening.
+ssh_allowed_users: [student, devops, ubuntu]
